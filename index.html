@@ -14,22 +14,25 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            overflow: hidden;
         }
         h1 {
             color: #d63384;
-            font-size: 32px;
+            font-size: 36px;
+            position: relative;
         }
         .buttons {
             margin-top: 20px;
             position: relative;
         }
         button {
-            font-size: 18px;
-            padding: 10px 20px;
+            font-size: 20px;
+            padding: 12px 24px;
             margin: 10px;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 10px;
+            transition: 0.3s;
         }
         #yes {
             background-color: #ff4d6d;
@@ -41,10 +44,25 @@
             position: absolute;
         }
         #message {
-            font-size: 22px;
+            font-size: 24px;
             color: #d63384;
             margin-top: 20px;
             font-weight: bold;
+        }
+        #happyRabbit, #sadRabbit {
+            display: none;
+            width: 200px;
+            margin-top: 20px;
+        }
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: red;
+            animation: float 5s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-800px); opacity: 0; }
         }
     </style>
 </head>
@@ -57,10 +75,18 @@
     </div>
 
     <p id="message"></p>
+    <img id="happyRabbit" src="https://media.giphy.com/media/l0HUpt2s9Pclgt9Vm/giphy.gif" alt="Happy Rabbit">
+    <img id="sadRabbit" src="https://media.giphy.com/media/k61nOBRRBMxva/giphy.gif" alt="Sad Rabbit">
+
+    <audio id="loveSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
 
     <script>
         function sayYes() {
             document.getElementById("message").innerText = "Yay! I knew you'd say yes! ❤️";
+            document.getElementById("happyRabbit").style.display = "block";
+            document.getElementById("sadRabbit").style.display = "none"; // Hide sad rabbit
+            document.getElementById("loveSound").play();
+            createHearts();
         }
 
         function moveNo() {
@@ -68,6 +94,23 @@
             let y = Math.random() * (window.innerHeight - 100);
             document.getElementById("no").style.left = x + "px";
             document.getElementById("no").style.top = y + "px";
+
+            // Show sad rabbit
+            document.getElementById("sadRabbit").style.display = "block";
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 30; i++) {
+                let heart = document.createElement("div");
+                heart.className = "heart";
+                heart.innerHTML = "❤️";
+                heart.style.left = Math.random() * window.innerWidth + "px";
+                heart.style.top = Math.random() * window.innerHeight + "px";
+                heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+                document.body.appendChild(heart);
+
+                setTimeout(() => { heart.remove(); }, 5000);
+            }
         }
     </script>
 
